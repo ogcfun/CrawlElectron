@@ -6,10 +6,16 @@ import icon from '../../resources/icon.png?asset'
 function createWindow(): void {
   // 创建浏览器窗口。
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1200,
+    height: 720,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: 'rgba(0,0,0,0)',
+      height: 35,
+      symbolColor: 'rgb(78,78,78)'
+    },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -69,6 +75,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// 在此文件中，您可以包含应用程序特定主流程的其余部分
-// 代码。 您还可以将它们放在单独的文件中并在此处需要它们。
