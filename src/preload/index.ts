@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // 渲染器的自定义 API
@@ -11,6 +11,14 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('electronAPI', {
+      openFile: async () => {
+        const { canceled, filePaths } = await ipcRenderer.invoke('dialog:openFile')
+        if (!canceled) {
+          return filePaths[0]
+        }
+      }
+    })
   } catch (error) {
     console.error(error)
   }
