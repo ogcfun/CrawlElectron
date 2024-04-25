@@ -1,22 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-async function handleFileOpen(): Promise<string> {
-  try {
-    const { canceled, filePaths } = await dialog.showOpenDialog({})
-    console.log('canceled: ', canceled)
-    console.log('filePaths: ', filePaths)
-    if (!canceled) {
-      return filePaths[0]
-    }
-    throw new Error('文件对话框已取消')
-  } catch (error) {
-    console.error('Error while handling file open:', error)
-    throw error
-  }
-}
+import { handleExecutablePath, handleFilePath} from './electronApi/index'
 
 function createWindow(): void {
   // 创建浏览器窗口。
@@ -86,8 +73,9 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC 测试
-  ipcMain.handle('dialog:openFile', handleFileOpen)
+  // IPC 通信
+  ipcMain.handle('dialog:openExecutablePath', handleExecutablePath) // 选择浏览器路径弹窗
+  ipcMain.handle('dialog:openFilePath', handleFilePath) // 选择图片保存路径弹窗
 
   // 创建主窗口
   createWindow()

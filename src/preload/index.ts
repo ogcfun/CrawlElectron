@@ -11,16 +11,14 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
-    contextBridge.exposeInMainWorld('electronAPI', {
-      openFile: async () => {
-        const { canceled, filePaths } = await ipcRenderer.invoke('dialog:openFile')
-        if (!canceled) {
-          return filePaths[0]
-        }
-      }
+    contextBridge.exposeInMainWorld('executablePath', {
+      openExecutablePath: () => ipcRenderer.invoke('dialog:openExecutablePath')
     })
-  } catch (error) {
-    console.error(error)
+    contextBridge.exposeInMainWorld('filePath', {
+      openFilePath: () => ipcRenderer.invoke('dialog:openFilePath')
+    })
+  } catch (error: any) {
+    throw new Error(error.message)
   }
 } else {
   // @ts-ignore (define in dts)
