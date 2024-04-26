@@ -51,8 +51,18 @@
       </el-table>
 
       <div class="icon" @click="continueOrPause">
-        <el-icon v-if="startOrShutDown" color="#2891ed" :size="40"><VideoPause /></el-icon>
-        <el-icon v-else color="#f13333" :size="40"><VideoPlay /></el-icon>
+        <el-tooltip
+          v-if="startOrShutDown"
+          class="box-item"
+          effect="light"
+          content="爬取中"
+          placement="top"
+        >
+          <el-icon color="#2891ed" :size="40"><VideoPause /></el-icon>
+        </el-tooltip>
+        <el-tooltip v-else class="box-item" effect="light" content="暂停中" placement="top">
+          <el-icon color="#f13333" :size="40"><VideoPlay /></el-icon>
+        </el-tooltip>
       </div>
     </div>
   </div>
@@ -68,7 +78,7 @@ interface RuleForm {
   pageEnd: string
 }
 
-const startOrShutDown = ref<boolean>(true) // 启动或者暂停
+const startOrShutDown = ref<boolean>(false) // 启动或者暂停
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
@@ -87,37 +97,37 @@ const tableData = [
   {
     date: '2016-05-03',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-02',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-04',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-01',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-08',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-06',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   },
   {
     date: '2016-05-07',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles'
   }
 ]
 
