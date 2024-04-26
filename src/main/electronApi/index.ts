@@ -1,8 +1,7 @@
 import { dialog } from 'electron'
-
 /**
  * 选择浏览器地址
- * @returns 
+ * @returns
  */
 export async function handleExecutablePath(): Promise<string> {
   try {
@@ -11,17 +10,17 @@ export async function handleExecutablePath(): Promise<string> {
     })
     if (!canceled) {
       return filePaths[0]
+    } else {
+      return ''
     }
-    throw new Error('取消操作')
-  } catch (error) {
-    console.error('Error while handling file open:', error)
-    throw error
+  } catch (error: any) {
+    throw new Error(error.message)
   }
 }
 
 /**
  * 选择图片保存地址
- * @returns 
+ * @returns
  */
 export async function handleFilePath(): Promise<string> {
   try {
@@ -30,10 +29,10 @@ export async function handleFilePath(): Promise<string> {
     })
     if (!canceled) {
       return filePaths[0]
+    } else {
+      return ''
     }
-    throw new Error('取消操作')
-  } catch (error) {
-    console.error('Error while handling file open:', error)
-    throw error
+  } catch (error: any) {
+    throw new Error(error.message)
   }
 }

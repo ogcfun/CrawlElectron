@@ -60,4 +60,8 @@ body {
   /* 内容区需要设置可滚动 */
   overflow: auto;
 }
+.el-main {
+  padding: 0;
+  margin: 0;
+}
 </style>

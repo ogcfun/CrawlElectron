@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <div>Home</div>
-    <div class="get-scss"><svg-icon icon-class="home" />svg图标使用</div>
-  </div>
+  <div class="home">Home</div>
 </template>
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
-div {
+.home {
+  height: calc(100vh - 35px);
   color: $home-text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

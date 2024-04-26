@@ -92,9 +92,9 @@ const openExecutableDialog = async () => {
   try {
     const filePath = await window.executablePath.openExecutablePath()
     ruleForm.value.executablePath = filePath
-  } catch (err: any) {
+  } catch (err) {
     ElMessage({
-      message: '选择失败：' + err.message,
+      message: '操作失败',
       type: 'warning',
       grouping: true,
       plain: true,
@@ -110,9 +110,9 @@ const openFileDialog = async () => {
   try {
     const filePath = await window.filePath.openFilePath()
     ruleForm.value.imagePath = filePath
-  } catch (err: any) {
+  } catch (err) {
     ElMessage({
-      message: '选择失败：' + err.message,
+      message: '操作失败',
       type: 'warning',
       grouping: true,
       plain: true,
@@ -123,7 +123,7 @@ const openFileDialog = async () => {
 
 /**
  * 保存信息到本地
- * @param formEl 
+ * @param formEl
  */
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
