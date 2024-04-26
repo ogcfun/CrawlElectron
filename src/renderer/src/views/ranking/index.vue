@@ -45,9 +45,16 @@
     <div class="log-ranking">
       <el-table :data="tableData" height="calc(100vh - 35px)" style="width: 96%">
         <el-table-column prop="date" label="下载时间" width="180" />
-        <el-table-column prop="name" label="作品名称" width="180" />
-        <el-table-column prop="address" label="作者名称" />
+        <el-table-column prop="name" label="作品名称" />
+        <el-table-column prop="address" label="作者名称" width="140" />
         <el-table-column prop="date" label="下载状态" width="180" />
+        <el-table-column fixed="right" label="操作" width="60">
+          <template #default="scope">
+            <el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
+              打开
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
       <div class="icon" @click="continueOrPause">
@@ -96,38 +103,43 @@ const rules = reactive<FormRules<RuleForm>>({
 const tableData = [
   {
     date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   },
   {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
+  },
+  {
+    date: '2016-05-03',
+    address: 'Tom',
+    name: 'No. 189, Grove St, Los Angeles'
   }
 ]
 

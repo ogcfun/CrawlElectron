@@ -4,21 +4,6 @@ export const Layout = () => import('@renderer/layout/index.vue')
 
 // 静态路由
 export const constantRoutes: RouteRecordRaw[] = [
-  // {
-  //   path: '/login',
-  //   component: () => import('@renderer/views/home/index.vue'),
-  //   name: 'Login'
-  // },
-  // {
-  //   path: '/register',
-  //   component: () => import('@renderer/views/Register.vue'),
-  //   name: 'Register'
-  // },
-  // {
-  //   path: "/404",
-  //   component: () => import("@/views/error-page/404.vue"),
-  //   name:"404"
-  // },
   {
     path: '/',
     component: Layout,
@@ -38,6 +23,16 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: '/search',
         component: () => import('@renderer/views/search/index.vue'),
         name: 'Search'
+      },
+      {
+        path: '/find',
+        component: () => import('@renderer/views/find/index.vue'),
+        name: 'Find'
+      },
+      {
+        path: '/log',
+        component: () => import('@renderer/views/log/index.vue'),
+        name: 'Log'
       },
       {
         path: '/setting',

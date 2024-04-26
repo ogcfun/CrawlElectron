@@ -33,6 +33,22 @@
           </div>
         </el-menu-item>
       </router-link>
+      <router-link to="/find" exact>
+        <el-menu-item index="/find">
+          <div class="menu-item">
+            <el-icon :size="40"><Promotion /></el-icon>
+            <span>发 现</span>
+          </div>
+        </el-menu-item>
+      </router-link>
+      <router-link to="/log" exact>
+        <el-menu-item index="/log">
+          <div class="menu-item">
+            <el-icon :size="40"><Document /></el-icon>
+            <span>日 志</span>
+          </div>
+        </el-menu-item>
+      </router-link>
       <router-link to="/setting" exact>
         <el-menu-item index="/setting">
           <div class="menu-item">
@@ -46,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { House, TrophyBase, Search, Setting } from '@element-plus/icons-vue'
+import { House, TrophyBase, Search, Promotion, Document, Setting } from '@element-plus/icons-vue'
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)

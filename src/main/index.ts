@@ -3,11 +3,13 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-import { handleExecutablePath, handleFilePath} from './electronApi/index'
+import { handleExecutablePath, handleFilePath } from './electronApi/index'
+
+let mainWindow: BrowserWindow | null
 
 function createWindow(): void {
   // 创建浏览器窗口。
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     // 窗口的初始宽度为 1200 像素
     width: 1200,
     // 窗口的初始高度为 720 像素
@@ -41,7 +43,7 @@ function createWindow(): void {
 
   // 等待窗口准备好显示后再显示窗口
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
   })
 
   // 防止恶意网站弹出新窗口或重定向到其他网站
