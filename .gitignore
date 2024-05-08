@@ -1,6 +1,6 @@
 node_modules
+node_process
 dist
 out
-node
 .DS_Store
 *.log*

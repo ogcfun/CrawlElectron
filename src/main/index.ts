@@ -11,9 +11,9 @@ function createWindow(): void {
   // 创建浏览器窗口。
   mainWindow = new BrowserWindow({
     // 窗口的初始宽度为 1200 像素
-    width: 1200,
+    width: 1440,
     // 窗口的初始高度为 720 像素
-    height: 720,
+    height: 900,
     // 设置为 false，表示创建窗口后不立即显示
     show: false,
     // 自动隐藏菜单栏

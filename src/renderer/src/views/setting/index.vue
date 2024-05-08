@@ -28,11 +28,20 @@
             </el-icon>
           </div>
         </el-form-item>
-        <el-form-item label="可视化" prop="headless">
+        <el-form-item label="开启可视化" prop="headless">
           <el-radio-group v-model="ruleForm.headless">
             <el-radio value="true">开启</el-radio>
             <el-radio value="false">关闭</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="开启代理" prop="useProxy">
+          <el-radio-group v-model="ruleForm.useProxy">
+            <el-radio value="true">开启</el-radio>
+            <el-radio value="false">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="代理端口" prop="port" :rules="getPortValidationRules">
+          <el-input v-model="ruleForm.port" placeholder="请填写代理端口号 如：7890" :disabled="ruleForm.useProxy === 'false'"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -55,6 +64,8 @@ interface RuleForm {
   executablePath: string
   imagePath: string
   headless: string
+  useProxy: string
+  port: string
 }
 
 const formSize = ref<ComponentSize>('default')
@@ -64,7 +75,9 @@ const ruleForm = ref<RuleForm>({
   pixiv_password: '',
   executablePath: '',
   imagePath: '',
-  headless: 'false'
+  headless: 'false',
+  useProxy: 'false',
+  port: ''
 })
 
 const rules = reactive<FormRules<RuleForm>>({
@@ -82,8 +95,23 @@ const rules = reactive<FormRules<RuleForm>>({
   ],
   headless: [
     { required: true, message: '请选择是否可视化操作', trigger: 'blur' }
-  ]
+  ],
+  useProxy: [
+    { required: true, message: '请选择是否开启代理', trigger: 'blur' }
+  ],
+  port: []
 })
+
+// 监听 useProxy 字段的变化，动态更新 port 字段的验证规则
+watch(() => ruleForm.value.useProxy, (value) => {
+  if (value) {
+    rules.port = [
+      { required: true, message: '请填写代理端口号', trigger: 'blur' }
+    ]
+  } else {
+    rules.port = [];
+  }
+});
 
 /**
  * 选择浏览器路径
@@ -134,6 +162,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       localStorage.setItem("executablePath", ruleForm.value.executablePath);
       localStorage.setItem("imagePath", ruleForm.value.imagePath);
       localStorage.setItem("headless", ruleForm.value.headless);
+      localStorage.setItem("useProxy", ruleForm.value.useProxy);
+      localStorage.setItem("port", ruleForm.value.port);
 
       ElMessage({
         message: '信息保存成功',
@@ -166,7 +196,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
     pixiv_password: '',
     executablePath: '',
     imagePath: '',
-    headless: 'false'
+    headless: 'false',
+    useProxy: 'false',
+    port: ''
   }
 
   ElMessage({
@@ -187,12 +219,16 @@ function getLocalStorage() {
   const executablePath = localStorage.getItem("executablePath");
   const imagePath = localStorage.getItem("imagePath");
   const headless = localStorage.getItem("headless");
+  const useProxy = localStorage.getItem("useProxy");
+  const port = localStorage.getItem("port");
   ruleForm.value = {
     pixiv_username: pixiv_username === null ? ruleForm.value.pixiv_username : pixiv_username,
     pixiv_password: pixiv_password === null ? ruleForm.value.pixiv_password : pixiv_password,
     executablePath: executablePath === null ? ruleForm.value.executablePath : executablePath,
     imagePath: imagePath === null ? ruleForm.value.imagePath : imagePath,
     headless: headless === null ? ruleForm.value.headless : headless,
+    useProxy: useProxy === null ? ruleForm.value.useProxy : useProxy,
+    port: port === null ? ruleForm.value.port : port
   };
 }
 
