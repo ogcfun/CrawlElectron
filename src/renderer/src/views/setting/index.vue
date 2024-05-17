@@ -40,7 +40,7 @@
             <el-radio value="false">关闭</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="代理端口" prop="port" :rules="getPortValidationRules">
+        <el-form-item label="代理端口" prop="port">
           <el-input v-model="ruleForm.port" placeholder="请填写代理端口号 如：7890" :disabled="ruleForm.useProxy === 'false'"/>
         </el-form-item>
         <el-form-item>

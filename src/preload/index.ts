@@ -17,6 +17,15 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('filePath', {
       openFilePath: () => ipcRenderer.invoke('dialog:openFilePath')
     })
+    contextBridge.exposeInMainWorld('openFolder', {
+      openFolderPath: (filePath) => ipcRenderer.invoke('open-folder-path', filePath)
+    })
+    contextBridge.exposeInMainWorld('getRanking', {
+      getRankingInfo: (rankingData) => ipcRenderer.invoke('invoke-get-ranking', rankingData)
+    })
+    contextBridge.exposeInMainWorld('rankingResult', {
+      rankingResultInfo: () => ipcRenderer.invoke('ranking-result-info')
+    })
   } catch (error: any) {
     throw new Error(error.message)
   }

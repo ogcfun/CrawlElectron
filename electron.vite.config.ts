@@ -14,7 +14,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // 自动导入svg图标
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 export default defineConfig({
   main: {
@@ -31,7 +31,7 @@ export default defineConfig({
     },
     server: {
       host: '0.0.0.0',
-      port: 3000
+      port: 9000
     },
     plugins: [
       vue(),

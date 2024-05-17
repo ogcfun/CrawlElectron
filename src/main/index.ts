@@ -3,7 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-import { handleExecutablePath, handleFilePath } from './electronApi/index'
+import { handleExecutablePath, handleFilePath, openFolderAndSelectFile } from './utils/index'
+
+import { getRanking } from './api/index'
 
 let mainWindow: BrowserWindow | null
 
@@ -78,6 +80,26 @@ app.whenReady().then(() => {
   // IPC 通信
   ipcMain.handle('dialog:openExecutablePath', handleExecutablePath) // 选择浏览器路径弹窗
   ipcMain.handle('dialog:openFilePath', handleFilePath) // 选择图片保存路径弹窗
+  ipcMain.handle('open-folder-path', (event, filePath: string) => {
+    try {
+      openFolderAndSelectFile(filePath)
+      return ''
+    } catch (error) {
+      return { error: '打开文件失败' }
+    }
+  })
+
+  // 监听从渲染进程发送的invoke-get-ranking消息
+  ipcMain.handle('invoke-get-ranking', async (event, rankingData) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      // 调用 getRanking 函数，并将 rankingData 作为参数传递
+      return await getRanking(rankingData)
+    } catch (error) {
+      // 如果发生错误，将错误信息返回给渲染进程
+      return { error: error }
+    }
+  })
 
   // 创建主窗口
   createWindow()
