@@ -115,7 +115,7 @@ interface RuleForm {
   pageEnd: string
 }
 
-const startOrShutDown = ref<boolean>(false) // 启动或者暂停
+// const startOrShutDown = ref<boolean>(false) // 启动或者暂停
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
@@ -137,6 +137,17 @@ const tableRef = ref(null)
 const logContainer = ref(null)
 
 /**
+ * 停止监听
+ */
+const stopListening = () => {
+  if (instance) {
+    const socketService = instance.appContext.config.globalProperties.$socketService
+    socketService.off('download-message');
+    socketService.off('log-message');
+  }
+};
+
+/**
  * 开始爬取图片
  * @param formEl
  */
@@ -144,7 +155,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      // console.log('submit!')
       const rankingData = {
         imagePath: localStorage.getItem('imagePath'),
         executablePath: localStorage.getItem('executablePath'),
@@ -161,7 +171,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       // 设置爬取按钮动画
       crawlStart.value = true
       // 设置菜单是否能点击
-      useMenu.isShowBool()
+      useMenu.onShowBool()
 
       // 启动监听Socket
       if (instance) {
@@ -203,8 +213,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           plain: true,
           offset: 48
         })
+        stopListening()
         crawlStart.value = false
-        useMenu.isShowBool()
+        useMenu.offShowBool()
       } else {
         ElMessage({
           message: result,
@@ -214,8 +225,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           offset: 48
         })
       }
+      stopListening()
       crawlStart.value = false
-      useMenu.isShowBool()
+      useMenu.offShowBool()
     } else {
       console.log('error submit!', fields)
     }
@@ -262,7 +274,7 @@ const submitFormEnd = () => {
  * @param e
  */
 const openRow = (e: string) => {
-  console.log('e :>> ', e)
+  // console.log('e :>> ', e)
   const result = window.openFolder.openFolderPath(e)
   if (result.error) {
     ElMessage({

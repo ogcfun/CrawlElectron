@@ -17,16 +17,21 @@ const useMenuStore = defineStore(
     })
 
     // 创建方法
-
-    function isShowBool() {
+    function offShowBool() {
       // 改变test的值
-      state.show = !state.show
+      state.show = false
+    }
+
+    function onShowBool() {
+      // 改变test的值
+      state.show = true
     }
 
     // 导出
     return {
       ...toRefs(state),
-      isShowBool
+      offShowBool,
+      onShowBool
     }
   },
   {

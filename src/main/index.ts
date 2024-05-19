@@ -5,7 +5,7 @@ import icon from '../../resources/icon.png?asset'
 
 import { handleExecutablePath, handleFilePath, openFolderAndSelectFile } from './utils/index'
 
-import { getRanking } from './api/index'
+import { getRanking, getSearch } from './api/index'
 
 let mainWindow: BrowserWindow | null
 
@@ -95,6 +95,18 @@ app.whenReady().then(() => {
     try {
       // 调用 getRanking 函数，并将 rankingData 作为参数传递
       return await getRanking(rankingData)
+    } catch (error) {
+      // 如果发生错误，将错误信息返回给渲染进程
+      return { error: error }
+    }
+  })
+
+   // 监听从渲染进程发送的invoke-get-search消息
+   ipcMain.handle('invoke-get-search', async (event, searchData) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      // 调用 getSearch 函数，并将 searchData 作为参数传递
+      return await getSearch(searchData)
     } catch (error) {
       // 如果发生错误，将错误信息返回给渲染进程
       return { error: error }

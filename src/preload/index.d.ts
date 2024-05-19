@@ -6,5 +6,8 @@ declare global {
     api: unknown
     executablePath: openExecutablePath
     filePath: openFilePath
+    openFolder: openFolderPath
+    getRanking: getRankingInfo
+    getSearch: getSearchInfo
   }
 }

@@ -54,7 +54,11 @@ class SocketService {
    */
   off(eventName: string, callback: (...args) => void): void {
     if (this.socket) {
-      this.socket.off(eventName, callback)
+      if (callback) {
+        this.socket.off(eventName, callback);
+      } else {
+        this.socket.off(eventName); // 移除所有该事件名的监听器
+      }
     }
   }
 
