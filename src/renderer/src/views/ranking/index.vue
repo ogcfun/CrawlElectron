@@ -52,7 +52,7 @@
       <el-table ref="tableRef" :data="tableData" height="calc(70vh - 35px)" style="width: 96%">
         <el-table-column prop="number" label="作品序号" width="100" />
         <el-table-column prop="title" label="作品标题" />
-        <el-table-column prop="imageName" label="作品名称" />
+        <el-table-column prop="imageName" label="图片名称" />
         <el-table-column prop="author" label="作者名称" width="160" />
         <el-table-column prop="DownloadTime" label="下载时间" width="180" />
         <el-table-column fixed="right" label="操作" width="80">

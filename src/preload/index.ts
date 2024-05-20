@@ -11,6 +11,9 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('getUsername', {
+      getUsernameInfo: () => ipcRenderer.invoke('get-username')
+    })
     contextBridge.exposeInMainWorld('executablePath', {
       openExecutablePath: () => ipcRenderer.invoke('dialog:openExecutablePath')
     })
@@ -25,6 +28,12 @@ if (process.contextIsolated) {
     })
     contextBridge.exposeInMainWorld('getSearch', {
       getSearchInfo: (searchData) => ipcRenderer.invoke('invoke-get-search', searchData)
+    })
+    contextBridge.exposeInMainWorld('getLog', {
+      getLogInfo: (logData) => ipcRenderer.invoke('invoke-get-log', logData)
+    })
+    contextBridge.exposeInMainWorld('deleteLogLine', {
+      deleteLogLineInfo: (deletelogData) => ipcRenderer.invoke('invoke-delete-log', deletelogData)
     })
   } catch (error: any) {
     throw new Error(error.message)

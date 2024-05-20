@@ -1,11 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import * as os from 'os';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 import { handleExecutablePath, handleFilePath, openFolderAndSelectFile } from './utils/index'
 
-import { getRanking, getSearch } from './api/index'
+import { getRanking, getSearch, getLog, deleteLogLine } from './api/index'
 
 let mainWindow: BrowserWindow | null
 
@@ -78,6 +79,11 @@ app.whenReady().then(() => {
   })
 
   // IPC 通信
+  // 发送windows用户名称
+  ipcMain.handle('get-username', () => {
+    const userInfo = os.userInfo()
+    return userInfo.username
+  })
   ipcMain.handle('dialog:openExecutablePath', handleExecutablePath) // 选择浏览器路径弹窗
   ipcMain.handle('dialog:openFilePath', handleFilePath) // 选择图片保存路径弹窗
   ipcMain.handle('open-folder-path', (event, filePath: string) => {
@@ -101,12 +107,36 @@ app.whenReady().then(() => {
     }
   })
 
-   // 监听从渲染进程发送的invoke-get-search消息
-   ipcMain.handle('invoke-get-search', async (event, searchData) => {
+  // 监听从渲染进程发送的invoke-get-search消息
+  ipcMain.handle('invoke-get-search', async (event, searchData) => {
     // eslint-disable-next-line no-useless-catch
     try {
       // 调用 getSearch 函数，并将 searchData 作为参数传递
       return await getSearch(searchData)
+    } catch (error) {
+      // 如果发生错误，将错误信息返回给渲染进程
+      return { error: error }
+    }
+  })
+
+  // 监听从渲染进程发送的invoke-get-log消息
+  ipcMain.handle('invoke-get-log', async (event, logData) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      // 调用 getLog 函数，并将 logData 作为参数传递
+      return await getLog(logData)
+    } catch (error) {
+      // 如果发生错误，将错误信息返回给渲染进程
+      return { error: error }
+    }
+  })
+
+  // 监听从渲染进程发送的invoke-delete-search消息
+  ipcMain.handle('invoke-delete-log', async (event, deletelogData) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      // 调用 deleteLogLine 函数，并将 deletelogData 作为参数传递
+      return await deleteLogLine(deletelogData)
     } catch (error) {
       // 如果发生错误，将错误信息返回给渲染进程
       return { error: error }

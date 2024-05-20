@@ -1,6 +1,5 @@
 <template>
   <div class="search">
-
     <el-button class="search-icon" :disabled="crawlStart" @click="openForm">
       <el-icon v-if="!crawlStart" color="#409efc" class="no-inherit" :size="20">
         <Search />
@@ -11,8 +10,16 @@
     </el-button>
 
     <el-dialog v-model="dialogFormVisible" width="500">
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto" class="demo-ruleForm"
-        label-position="top" :size="formSize" status-icon>
+      <el-form
+        ref="ruleFormRef"
+        :model="ruleForm"
+        :rules="rules"
+        label-width="auto"
+        class="demo-ruleForm"
+        label-position="top"
+        :size="formSize"
+        status-icon
+      >
         <el-form-item label="作者名称" prop="searchUser" :label-width="140">
           <el-input v-model="ruleForm.searchUser" />
         </el-form-item>
@@ -26,9 +33,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitForm(ruleFormRef)">
-            爬取
-          </el-button>
+          <el-button type="primary" @click="submitForm(ruleFormRef)"> 爬取 </el-button>
         </div>
       </template>
     </el-dialog>
@@ -37,7 +42,7 @@
       <el-table ref="tableRef" :data="tableData" height="calc(70vh - 35px)" style="width: 96%">
         <el-table-column prop="number" label="作品序号" width="100" />
         <el-table-column prop="title" label="作品标题" />
-        <el-table-column prop="imageName" label="作品名称" />
+        <el-table-column prop="imageName" label="图片名称" />
         <el-table-column prop="author" label="作者名称" width="160" />
         <el-table-column prop="DownloadTime" label="下载时间" width="180" />
         <el-table-column fixed="right" label="操作" width="80">
@@ -52,11 +57,16 @@
 
     <div class="log">
       <div class="log-box" ref="logContainer">
-        <div class="message" v-for="(item, index) in logMessages" :key="index" :class="{
-      'bg-success': item.state === 'success',
-      'bg-error': item.state === 'error',
-      'bg-warning': item.state === 'warning'
-    }">
+        <div
+          class="message"
+          v-for="(item, index) in logMessages"
+          :key="index"
+          :class="{
+            'bg-success': item.state === 'success',
+            'bg-error': item.state === 'error',
+            'bg-warning': item.state === 'warning'
+          }"
+        >
           {{ item.message }}
         </div>
       </div>
@@ -110,10 +120,10 @@ const openForm = () => {
 const stopListening = () => {
   if (instance) {
     const socketService = instance.appContext.config.globalProperties.$socketService
-    socketService.off('search-download-message');
-    socketService.off('search-log-message');
+    socketService.off('search-download-message')
+    socketService.off('search-log-message')
   }
-};
+}
 
 /**
  * 开始爬取图片
@@ -153,7 +163,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听表单数据，滚动到表单底部
           nextTick(() => {
             if (tableRef.value) {
-              const tableBodyWrapper = tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
+              const tableBodyWrapper =
+                tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
               tableBodyWrapper.scrollTop = tableBodyWrapper.scrollHeight
             }
           })
@@ -209,7 +220,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
  * @param e
  */
 const openRow = (e: string) => {
-  console.log('e :>> ', e)
+  // console.log('e :>> ', e)
   const result = window.openFolder.openFolderPath(e)
   if (result.error) {
     ElMessage({
@@ -234,7 +245,6 @@ const openRow = (e: string) => {
     height: 50px;
     background-color: #9191916e;
     border-radius: 50%;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
