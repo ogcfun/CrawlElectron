@@ -8,9 +8,6 @@
       <el-table-column prop="DownloadTime" label="下载时间" width="180" />
       <el-table-column fixed="right" label="操作" width="180">
         <template #default="scope">
-          <el-button link type="primary" @click.prevent="showRow(scope.row.destination)">
-            预览
-          </el-button>
           <el-button link type="primary" @click.prevent="openRow(scope.row.destination)">
             打开
           </el-button>
@@ -72,8 +69,6 @@ const handleCurrentChange = (val: number) => {
   getLogData({ path: path.value, page: val, pageSize: pageSize.value })
 }
 
-const showRow = () => {}
-
 /**
  * 打开对应路径文件夹中的图片
  * @param e
@@ -92,31 +87,41 @@ const openRow = (e: string) => {
   }
 }
 
+/**
+ * 删除一条文件信息
+ * @param row
+ */
 const deleteRow = async (row) => {
-  const { destination } = row
-  const result = await window.deleteLogLine.deleteLogLineInfo({
-    imagePath: destination,
-    filePath: path.value,
-    jsonObject: JSON.parse(JSON.stringify(row))
+  const { destination, imageName } = row
+  ElMessageBox.confirm(`删除 ${imageName} ？`, {
+    confirmButtonText: '删除',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    const result = await window.deleteLogLine.deleteLogLineInfo({
+      imagePath: destination,
+      filePath: path.value,
+      jsonObject: JSON.parse(JSON.stringify(row))
+    })
+    if (result.error) {
+      ElMessage({
+        message: result.error,
+        type: 'warning',
+        grouping: true,
+        plain: true,
+        offset: 48
+      })
+    } else {
+      ElMessage({
+        message: result.data,
+        type: 'warning',
+        grouping: true,
+        plain: true,
+        offset: 48
+      })
+    }
+    await getLogData({ path: path.value, page: page.value, pageSize: pageSize.value })
   })
-  if (result.error) {
-    ElMessage({
-      message: result.error,
-      type: 'warning',
-      grouping: true,
-      plain: true,
-      offset: 48
-    })
-  } else {
-    ElMessage({
-      message: result.data,
-      type: 'warning',
-      grouping: true,
-      plain: true,
-      offset: 48
-    })
-  }
-  await getLogData({ path: path.value, page: page.value, pageSize: pageSize.value })
 }
 
 /**

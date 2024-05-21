@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, shell } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // 渲染器的自定义 API
@@ -11,6 +11,9 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('openLink', {
+      openExternal: (url) => shell.openExternal(url)
+    })
     contextBridge.exposeInMainWorld('getUsername', {
       getUsernameInfo: () => ipcRenderer.invoke('get-username')
     })

@@ -8,7 +8,10 @@
       @open="handleOpen"
       @close="handleClose"
     >
-      <h3>爬虫</h3>
+      <!-- <h3>OGC</h3> -->
+      <div class="logo">
+        <el-image style="width: 40px; height: 40px" :src="logo" />
+      </div>
 
       <el-menu-item index="/home" :disabled="useMenu.show">
         <div class="menu-item">
@@ -28,12 +31,12 @@
           <span>搜 索</span>
         </div>
       </el-menu-item>
-      <el-menu-item index="/find" :disabled="useMenu.show">
+      <!-- <el-menu-item index="/find" :disabled="useMenu.show">
         <div class="menu-item">
           <el-icon :size="40"><Promotion /></el-icon>
           <span>发 现</span>
         </div>
-      </el-menu-item>
+      </el-menu-item> -->
       <el-menu-item index="/log" :disabled="useMenu.show">
         <div class="menu-item">
           <el-icon :size="40"><Document /></el-icon>
@@ -54,6 +57,8 @@
 import { House, TrophyBase, Search, Promotion, Document, Setting } from '@element-plus/icons-vue'
 import useMenuStore from '../../store/modules/menu'
 const useMenu = useMenuStore()
+
+import logo from '../../assets/images/LOGO.png'
 
 const handleOpen = (key: string, keyPath: string[]) => {
   // console.log(key, keyPath)
@@ -81,6 +86,11 @@ const handleClose = (key: string, keyPath: string[]) => {
     text-align: center;
     height: 60px;
     line-height: 60px;
+  }
+
+  .logo {
+    text-align: center;
+    margin: 20px 0;
   }
 
   .el-menu-item {
