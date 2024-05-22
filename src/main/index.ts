@@ -1,6 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { fork, ChildProcess } from 'child_process'
 import { join } from 'path'
-import * as os from 'os';
+import * as os from 'os'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
@@ -9,6 +10,11 @@ import { handleExecutablePath, handleFilePath, openFolderAndSelectFile } from '.
 import { getRanking, getSearch, getLog, deleteLogLine } from './api/index'
 
 let mainWindow: BrowserWindow | null
+let nestProcess: ChildProcess | null
+const scriptPath = join(__dirname, '../../node_process/main.js') // 子程序路径
+let restartAttempts = 0 // 重启尝试次数
+const maxRestartAttempts = 5 //最大重启尝试次数
+const restartDelay = 1000 // 1秒钟延迟
 
 function createWindow(): void {
   // 创建浏览器窗口。
@@ -150,6 +156,9 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  // 初次启动子进程
+  startNestProcess()
 })
 
 // 当所有窗口关闭时退出（macOS 除外）。
@@ -157,6 +166,55 @@ app.whenReady().then(() => {
 // 显式使用 Cmd + Q。
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    // 窗口关闭时退出子程序
+    if (nestProcess) {
+      nestProcess.kill()
+    }
     app.quit()
   }
 })
+
+/**
+ * 启动子程序
+ */
+function startNestProcess() {
+  nestProcess = fork(scriptPath)
+
+  // 监听子进程消息
+  nestProcess.on('spawn', () => {
+    console.log('NestJs 子进程运行成功！！！')
+    restartAttempts = 0 // 重置重启计数器
+  })
+
+  // 监听子进程错误
+  nestProcess.on('error', (err: Error) => {
+    console.error('子进程错误:', err)
+    // 子进程错误时重启
+    restartNestProcess()
+  })
+
+  /**
+   * 监听子进程退出
+   * @code 已成功退出，代码为 0，其他代码都是错误退出
+   * @signal 优雅的退出
+   */
+  nestProcess.on('exit', (code: number | null, signal: string | null) => {
+    console.log(`NestJs 子程序进程已退出，代码为 ${code}，信号为 ${signal}`)
+  })
+}
+
+/**
+ * 子程序报错时重启
+ */
+function restartNestProcess() {
+  if (restartAttempts < maxRestartAttempts) {
+    restartAttempts += 1
+    console.log(`尝试重启子进程 (${restartAttempts}/${maxRestartAttempts})...`)
+    setTimeout(() => {
+      startNestProcess()
+    }, restartDelay)
+  } else {
+    console.error('达到最大重启次数，停止重启子进程。')
+    app.quit() // 达到最大重启次数时退出应用程序
+  }
+}
