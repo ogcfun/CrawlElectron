@@ -13,5 +13,6 @@ declare global {
     getSearch: getSearchInfo
     getLog: getLogInfo
     deleteLogLine: deleteLogLineInfo
+    notification: showNotification
   }
 }

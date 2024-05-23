@@ -54,16 +54,16 @@
 </template>
 
 <script lang="ts" setup>
-import { House, TrophyBase, Search, Promotion, Document, Setting } from '@element-plus/icons-vue'
+import { House, TrophyBase, Search, Document, Setting } from '@element-plus/icons-vue'
 import useMenuStore from '../../store/modules/menu'
 const useMenu = useMenuStore()
 
 import logo from '../../assets/images/LOGO.png'
 
-const handleOpen = (key: string, keyPath: string[]) => {
+const handleOpen = () => {
   // console.log(key, keyPath)
 }
-const handleClose = (key: string, keyPath: string[]) => {
+const handleClose = () => {
   // console.log(key, keyPath)
 }
 </script>

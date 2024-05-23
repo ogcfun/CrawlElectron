@@ -133,8 +133,8 @@ const rules = reactive<FormRules<RuleForm>>({
 const tableData: any = reactive([])
 const logMessages: any = reactive([]) // 创建一个响应式数组来保存所有的日志信息
 const crawlStart = ref(false)
-const tableRef = ref(null)
-const logContainer = ref(null)
+const tableRef = ref<any>(null)
+const logContainer = ref<any>(null)
 
 /**
  * 停止监听
@@ -142,16 +142,17 @@ const logContainer = ref(null)
 const stopListening = () => {
   if (instance) {
     const socketService = instance.appContext.config.globalProperties.$socketService
-    socketService.off('download-message');
-    socketService.off('log-message');
+    socketService.off('download-message')
+    socketService.off('log-message')
   }
-};
+}
 
 /**
  * 开始爬取图片
  * @param formEl
  */
 const submitForm = async (formEl: FormInstance | undefined) => {
+  window.notification.showNotification('开始下载', `开始下载 ${ruleForm.rankingType} 排行榜`)
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
@@ -183,7 +184,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听表单数据，滚动到表单底部
           nextTick(() => {
             if (tableRef.value) {
-              const tableBodyWrapper = tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
+              const tableBodyWrapper =
+                tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
               tableBodyWrapper.scrollTop = tableBodyWrapper.scrollHeight
             }
           })
@@ -206,25 +208,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       // 发送IPC消息到主进程
       const result = await window.getRanking.getRankingInfo(rankingData)
       if (result.error) {
-        ElMessage({
-          message: result.error,
-          type: 'warning',
-          grouping: true,
-          plain: true,
-          offset: 48
-        })
-        stopListening()
-        crawlStart.value = false
-        useMenu.offShowBool()
+        window.notification.showNotification('下载失败', result.error, 'never')
       } else {
-        ElMessage({
-          message: result,
-          type: 'success',
-          grouping: true,
-          plain: true,
-          offset: 48
-        })
+        window.notification.showNotification('下载完成', result, 'never')
       }
+      // 关闭scoket链接
       stopListening()
       crawlStart.value = false
       useMenu.offShowBool()

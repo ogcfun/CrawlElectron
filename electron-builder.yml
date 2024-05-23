@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: top.ogcfun.app
 productName: crawlelectron
 directories:
   buildResources: build

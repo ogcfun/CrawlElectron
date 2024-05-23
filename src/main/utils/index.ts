@@ -1,5 +1,4 @@
 import { dialog, shell } from 'electron'
-import * as path from 'path'
 /**
  * 选择浏览器地址
  * @returns

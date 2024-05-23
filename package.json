@@ -1,7 +1,7 @@
 {
-  "name": "crawlpixiv",
+  "name": "ogcfun",
   "version": "1.0.0",
-  "description": "CrawlPixiv",
+  "description": "ogcfun",
   "main": "./out/main/index.js",
   "author": "ogcfun.top",
   "homepage": "https://electron-vite.org",

@@ -163,8 +163,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听表单数据，滚动到表单底部
           nextTick(() => {
             if (tableRef.value) {
-              const tableBodyWrapper =
-                tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
+              const tableBodyWrapper = (
+                tableRef?.value as any
+              )?.$refs?.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
               tableBodyWrapper.scrollTop = tableBodyWrapper.scrollHeight
             }
           })
@@ -178,7 +179,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听数据，滚动到底部
           nextTick(() => {
             if (logContainer.value) {
-              logContainer.value.scrollTop = logContainer.value.scrollHeight
+              (logContainer.value as any).scrollTop = (logContainer.value as any).scrollHeight
             }
           })
         })
@@ -187,24 +188,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       // 发送IPC消息到主进程
       const result = await window.getSearch.getSearchInfo(searchData)
       if (result.error) {
-        ElMessage({
-          message: result.error,
-          type: 'warning',
-          grouping: true,
-          plain: true,
-          offset: 48
-        })
-        stopListening()
-        useMenu.offShowBool()
-        crawlStart.value = false
+        window.notification.showNotification('下载失败', result.error, 'never')
       } else {
-        ElMessage({
-          message: result,
-          type: 'success',
-          grouping: true,
-          plain: true,
-          offset: 48
-        })
+        window.notification.showNotification('下载完成', result, 'never')
       }
       stopListening()
       useMenu.offShowBool()

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Notification, nativeImage } from 'electron'
 import { fork, ChildProcess } from 'child_process'
 import { join } from 'path'
 import * as os from 'os'
@@ -15,6 +15,9 @@ const scriptPath = join(__dirname, '../../node_process/main.js') // 子程序路
 let restartAttempts = 0 // 重启尝试次数
 const maxRestartAttempts = 5 //最大重启尝试次数
 const restartDelay = 1000 // 1秒钟延迟
+
+const appIconPath = join(__dirname, '../../src/renderer/src/assets/images/electron.png')
+const appIcon = nativeImage.createFromPath(appIconPath)
 
 function createWindow(): void {
   // 创建浏览器窗口。
@@ -35,6 +38,7 @@ function createWindow(): void {
       height: 35,
       symbolColor: 'rgb(78,78,78)'
     },
+    icon: appIcon,
     // 如果操作系统是 Linux，则设置窗口图标
     ...(process.platform === 'linux' ? { icon } : {}),
     // 配置 Web 页面的属性
@@ -90,9 +94,18 @@ app.whenReady().then(() => {
     const userInfo = os.userInfo()
     return userInfo.username
   })
+  // 打开系统级通知弹窗
+  ipcMain.handle('show-notification', (_, { title, body, timeoutType }) => {
+    new Notification({
+      title,
+      body,
+      timeoutType,
+      icon: appIconPath
+    }).show()
+  })
   ipcMain.handle('dialog:openExecutablePath', handleExecutablePath) // 选择浏览器路径弹窗
   ipcMain.handle('dialog:openFilePath', handleFilePath) // 选择图片保存路径弹窗
-  ipcMain.handle('open-folder-path', (event, filePath: string) => {
+  ipcMain.handle('open-folder-path', (_, filePath: string) => {
     try {
       openFolderAndSelectFile(filePath)
       return ''
@@ -102,7 +115,7 @@ app.whenReady().then(() => {
   })
 
   // 监听从渲染进程发送的invoke-get-ranking消息
-  ipcMain.handle('invoke-get-ranking', async (event, rankingData) => {
+  ipcMain.handle('invoke-get-ranking', async (_, rankingData) => {
     // eslint-disable-next-line no-useless-catch
     try {
       // 调用 getRanking 函数，并将 rankingData 作为参数传递
@@ -114,7 +127,7 @@ app.whenReady().then(() => {
   })
 
   // 监听从渲染进程发送的invoke-get-search消息
-  ipcMain.handle('invoke-get-search', async (event, searchData) => {
+  ipcMain.handle('invoke-get-search', async (_, searchData) => {
     // eslint-disable-next-line no-useless-catch
     try {
       // 调用 getSearch 函数，并将 searchData 作为参数传递
@@ -126,7 +139,7 @@ app.whenReady().then(() => {
   })
 
   // 监听从渲染进程发送的invoke-get-log消息
-  ipcMain.handle('invoke-get-log', async (event, logData) => {
+  ipcMain.handle('invoke-get-log', async (_, logData) => {
     // eslint-disable-next-line no-useless-catch
     try {
       // 调用 getLog 函数，并将 logData 作为参数传递
@@ -138,7 +151,7 @@ app.whenReady().then(() => {
   })
 
   // 监听从渲染进程发送的invoke-delete-search消息
-  ipcMain.handle('invoke-delete-log', async (event, deletelogData) => {
+  ipcMain.handle('invoke-delete-log', async (_, deletelogData) => {
     // eslint-disable-next-line no-useless-catch
     try {
       // 调用 deleteLogLine 函数，并将 deletelogData 作为参数传递
@@ -151,6 +164,10 @@ app.whenReady().then(() => {
 
   // 创建主窗口
   createWindow()
+
+  if (process.platform === 'win32') {
+    app.setAppUserModelId('ogcfun')
+  }
 
   // 在 macOS 上，当点击停靠图标并且没有其他窗口打开时，通常会重新创建一个窗口
   app.on('activate', function () {
@@ -169,6 +186,7 @@ app.on('window-all-closed', () => {
     // 窗口关闭时退出子程序
     if (nestProcess) {
       nestProcess.kill()
+      console.log('NestJs 子程序关闭中...')
     }
     app.quit()
   }
@@ -183,6 +201,13 @@ function startNestProcess() {
   // 监听子进程消息
   nestProcess.on('spawn', () => {
     console.log('NestJs 子进程运行成功！！！')
+    let option = {
+      title: 'NestJs', // 通知标题
+      body: 'NestJs 子进程运行成功！！！', // 内容
+      icon: join(__dirname, '../../src/renderer/src/assets/images/alipay.png')
+    }
+    console.log('option.icon :>> ', option.icon)
+    new Notification({ title: option.title, body: option.body, icon: option.icon }).show()
     restartAttempts = 0 // 重置重启计数器
   })
 
@@ -199,7 +224,11 @@ function startNestProcess() {
    * @signal 优雅的退出
    */
   nestProcess.on('exit', (code: number | null, signal: string | null) => {
-    console.log(`NestJs 子程序进程已退出，代码为 ${code}，信号为 ${signal}`)
+    if (code !== null) {
+      console.log(`NestJs 子程序进程已退出，代码为 ${code}`)
+    } else {
+      console.log(`NestJs 子程序进程已退出，信号为 ${signal}`)
+    }
   })
 }
 
@@ -214,7 +243,11 @@ function restartNestProcess() {
       startNestProcess()
     }, restartDelay)
   } else {
-    console.error('达到最大重启次数，停止重启子进程。')
-    app.quit() // 达到最大重启次数时退出应用程序
+    const errorMessage = '达到最大重启次数，停止重启子进程。'
+    console.error(errorMessage)
+    if (nestProcess) {
+      nestProcess.kill()
+    }
+    app.quit()
   }
 }
