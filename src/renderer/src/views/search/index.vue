@@ -102,10 +102,10 @@ const rules = reactive<FormRules<RuleForm>>({
 const ruleFormRef = ref<FormInstance>()
 const formSize = ref<ComponentSize>('default')
 const tableData: any = reactive([])
-const tableRef = ref(null)
 const logMessages: any = reactive([]) // 创建一个响应式数组来保存所有的日志信息
 const crawlStart = ref(false)
-const logContainer = ref(null)
+const tableRef = ref<any>(null)
+const logContainer = ref<any>(null)
 
 /**
  * 打开表单
@@ -163,9 +163,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听表单数据，滚动到表单底部
           nextTick(() => {
             if (tableRef.value) {
-              const tableBodyWrapper = (
-                tableRef?.value as any
-              )?.$refs?.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
+              const tableBodyWrapper =
+                tableRef.value.$refs.bodyWrapper.getElementsByClassName('el-scrollbar__wrap')[0]
               tableBodyWrapper.scrollTop = tableBodyWrapper.scrollHeight
             }
           })
@@ -179,7 +178,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // 监听数据，滚动到底部
           nextTick(() => {
             if (logContainer.value) {
-              (logContainer.value as any).scrollTop = (logContainer.value as any).scrollHeight
+              logContainer.value.scrollTop = logContainer.value.scrollHeight
             }
           })
         })
