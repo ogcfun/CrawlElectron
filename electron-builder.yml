@@ -1,23 +1,32 @@
-appId: top.ogcfun.app
-productName: crawlelectron
+appId: top.ogcfun.crawl
+productName: ogcfunCrawl
 directories:
   buildResources: build
 files:
+  - 'out/**'
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+extraFiles:
+  - from: 'node_process/main.js'
+    to: 'node/main.js'
 asarUnpack:
   - resources/**
 win:
-  executableName: crawlelectron
+  executableName: ogcfunCrawl
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+  # oneClick: false # 是否一键安装
+  # allowElevation: true # 允许请求提升。 如果为false，则用户必须使用提升的权限重新启动安装程序。
+  # artifactName: ${name}-${version}-setup.${ext} # 安装包名称
+  # shortcutName: ${productName} # 图标名称
+  # uninstallDisplayName: ${productName} # 控制面板名称
+  # createDesktopShortcut: always # 创建桌面图标
+  # createStartMenuShortcut: true # 创建开始菜单图标
+  # allowToChangeInstallationDirectory: true # 允许修改安装目录
+  include: 'build/installer.nsh' # 引用自定义NSIS脚本
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

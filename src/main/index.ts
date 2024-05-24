@@ -11,7 +11,10 @@ import { getRanking, getSearch, getLog, deleteLogLine } from './api/index'
 
 let mainWindow: BrowserWindow | null
 let nestProcess: ChildProcess | null
-const scriptPath = join(__dirname, '../../node_process/main.js') // 子程序路径
+// 子程序路径
+const scriptPath = app.isPackaged
+  ? join(process.resourcesPath, '..', 'node', 'main.js')
+  : join(__dirname, '../../node_process/main.js')
 let restartAttempts = 0 // 重启尝试次数
 const maxRestartAttempts = 5 //最大重启尝试次数
 const restartDelay = 1000 // 1秒钟延迟
@@ -201,13 +204,6 @@ function startNestProcess() {
   // 监听子进程消息
   nestProcess.on('spawn', () => {
     console.log('NestJs 子进程运行成功！！！')
-    let option = {
-      title: 'NestJs', // 通知标题
-      body: 'NestJs 子进程运行成功！！！', // 内容
-      icon: join(__dirname, '../../src/renderer/src/assets/images/alipay.png')
-    }
-    console.log('option.icon :>> ', option.icon)
-    new Notification({ title: option.title, body: option.body, icon: option.icon }).show()
     restartAttempts = 0 // 重置重启计数器
   })
 

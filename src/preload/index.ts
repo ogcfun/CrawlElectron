@@ -10,6 +10,9 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+
+    /***************************** 主程序操作 ******************************/
+
     // 打开浏览器链接
     contextBridge.exposeInMainWorld('openLink', {
       openExternal: (url) => shell.openExternal(url)
@@ -35,6 +38,9 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('openFolder', {
       openFolderPath: (filePath: string) => ipcRenderer.invoke('open-folder-path', filePath)
     })
+
+    /***************************** 网络请求 ******************************/
+
     // 获取排行榜图片
     contextBridge.exposeInMainWorld('getRanking', {
       getRankingInfo: (rankingData) => ipcRenderer.invoke('invoke-get-ranking', rankingData)
