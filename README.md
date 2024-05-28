@@ -2,6 +2,8 @@
 # Crawl Electron
 基于 Vue3 + TypeScript 的 Electron 爬虫应用程序
 
+点击下载：[Crawl Electron v1.0.0](https://oss.ogcfun.top/app/ogcfun-1.0.0-setup.exe)
+
 ### 功能实现
 
  1.  爬取排行榜图片
