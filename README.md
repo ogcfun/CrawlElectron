@@ -1,6 +1,6 @@
 
 # Crawl Electron
-基于 Vue3 + TypeScript 的 Electron Windows 爬虫应用程序
+基于 Vue3 + TypeScript 的 Electron 爬虫应用程序
 
 ### 功能实现
 
