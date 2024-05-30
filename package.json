@@ -1,7 +1,7 @@
 {
-  "name": "ogcfun",
+  "name": "ogcfunCrawl",
   "version": "1.0.0",
-  "description": "ogcfun",
+  "description": "ogcfunCrawl",
   "main": "./out/main/index.js",
   "author": "ogcfun.top",
   "homepage": "https://electron-vite.org",
