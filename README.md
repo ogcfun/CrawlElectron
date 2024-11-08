@@ -27,16 +27,15 @@
 
 ### 演示图
 ##
-![首页](https://github.com/YLN-deng/ImageHosting/blob/main/%E7%88%AC%E8%99%AB%E9%A6%96%E9%A1%B5Home.png?raw=true)
+![首页](https://gallery.ogcfun.top/crawl/crawl-home.png)
 
+![排行榜页面](https://gallery.ogcfun.top/crawl/crawl-ranking.png)
 
-![排行榜页面](https://raw.githubusercontent.com/YLN-deng/ImageHosting/main/%E7%88%AC%E8%99%AB%E6%8E%92%E8%A1%8C%E6%A6%9C%E9%A1%B5Ranking.png)
+![搜索页面](https://gallery.ogcfun.top/crawl/crawl-search.png)
 
-![搜索页面](https://github.com/YLN-deng/ImageHosting/blob/main/%E7%88%AC%E8%99%AB%E6%90%9C%E7%B4%A2%E9%A1%B5Search.png?raw=true)
+![日志页面](https://gallery.ogcfun.top/crawl/crawl-log.png)
 
-![日志页面](https://github.com/YLN-deng/ImageHosting/blob/main/%E7%88%AC%E8%99%AB%E6%97%A5%E5%BF%97%E9%A1%B5Log.png?raw=true)
-
-![设置页面](https://github.com/YLN-deng/ImageHosting/blob/main/%E7%88%AC%E8%99%AB%E8%AE%BE%E7%BD%AE%E9%A1%B5Setting.png?raw=true)
+![设置页面](https://gallery.ogcfun.top/crawl/crawl-setting.png)
 
 
 ##
